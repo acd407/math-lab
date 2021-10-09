@@ -1,3 +1,4 @@
 # math-lab
-My own works.
-I'll update it in(I don't know ...)
+
+### determinant ( C++ )
+##### 源代码链接 [source code](./determinant/main.cpp)
