@@ -1,0 +1,12 @@
+.vscode/
+*.exe
+*.o
+*.obj
+*.out
+*.zip
+*.jar
+*.log
+*.gz
+*.tar
+*.toc
+*.aux
