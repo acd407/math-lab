@@ -3,11 +3,11 @@
 ## Dev tools
 
 + [Environments](http://www.cnblogs.com/YHFBlogs/p/15456973.html)
-+ Microsoft (R) C/C++ 优化编译器 18.00.40629 版
-+ gcc version 11.2.0 (MinGW-W64 i686-posix)
-+ clang version 12.0.1 Target: i686-w64-windows-gnu
-Thread model: posix
-
-I hope I can write programs continually.
++ Microsoft (R) C/C++ 优化编译器 19.32.31329 版
++ gcc version 12.1.0 (Rev3, Built by MSYS2 project)
++ clang version 14.0.5 Target: x86_64-pc-windows-msvc Thread model: posix
++ Lua 5.4.4
++ OpenJDK Zulu17.32+13-CA (build 17.0.2+8-LTS)
++ cmake version 3.24.0-rc1
 
 My email: mathtimes@foxmail.com
