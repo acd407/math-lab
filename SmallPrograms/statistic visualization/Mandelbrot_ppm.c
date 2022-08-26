@@ -5,16 +5,20 @@
 #include <complex.h>
 #include <stdbool.h>
 
-#define XDIM 1024    //此项必须为8的倍数，否则有BUG
-#define YDIM 1024
+#define XDIM 2560
+#define YDIM 1600
 
-#define NUM 512    //迭代次数
+#define NUM 1024    //迭代次数
 
 // z = z*z + c
 
+//虚拟坐标转换
+#define i2c_re (i-0.7*XDIM)/XDIM*2*1.6
+#define j2c_im (j-0.5*YDIM)*2/YDIM
+
 bool tof_complex(int i, int j)
 {
-    double complex c = (i-0.75*XDIM)/XDIM*2+(j-0.5*YDIM)*2/YDIM*I;
+    double complex c = i2c_re+j2c_im*I;
     double complex z = 0;
     for(int t=1;t<=NUM;t++){
         z = z*z+c;
@@ -33,10 +37,7 @@ struct COMPLEX
 int tof_real(int i, int j)
 {
     struct COMPLEX z = {0,0};
-    struct COMPLEX c = {
-        (i-0.75*XDIM)/XDIM*2,
-        (j-0.5*YDIM)*2/YDIM
-    };
+    struct COMPLEX c = {i2c_re, j2c_im};
     for(int t=1;t<=NUM;t++){
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
@@ -54,13 +55,14 @@ struct RGB
     unsigned char B;
 };
 
-struct RGB translate2RGB(int code)  //code: 0 - 511
+struct RGB translate2RGB(int code)
 {
-    struct RGB ret = {0, 0, 0};//返回局部变量，危险
+    struct RGB ret = {0, 0, 0}; //返回局部变量，危险
     if(code){
-        ret.R = (int)(sqrt((double)code/NUM)*256);
-        ret.G = (int)(((double)code/NUM*(1.0-(double)code/NUM))*NUM);
-        ret.B = (int)(pow((1.0-(double)code/NUM), 108)*256);
+        double log_code = log(code)/log(NUM);   //from 0 to 1
+        ret.R = (int)(sqrt(log_code)*256);
+        ret.G = (int)(log_code*256);
+        ret.B = (int)((1-log_code)*(1-log_code)*256);
     }
     return ret;
 }
