@@ -3,7 +3,6 @@
 #include <string.h>
 #include <math.h>
 #include <complex.h>
-#include <stdbool.h>
 
 #define XDIM 2560
 #define YDIM 1600
@@ -16,7 +15,7 @@
 #define i2c_re (i-0.7*XDIM)/XDIM*2*1.6
 #define j2c_im (j-0.5*YDIM)*2/YDIM
 
-bool tof_complex(int i, int j)
+int tof_complex(int i, int j)
 {
     double complex c = i2c_re+j2c_im*I;
     double complex z = 0;
