@@ -10,3 +10,6 @@
 *.tar
 *.toc
 *.aux
+*.ppm
+*.pbm
+*.pgm
