@@ -4,8 +4,8 @@
 #include <math.h>
 #include <complex.h>
 
-#define XDIM 2560
-#define YDIM 1600
+#define XDIM 1600
+#define YDIM 1000
 
 #define NUM 1024    //迭代次数
 
@@ -15,7 +15,7 @@
 #define i2c_re (i-0.7*XDIM)/XDIM*2*1.6
 #define j2c_im (j-0.5*YDIM)*2/YDIM
 
-int tof_complex(int i, int j)
+int tof(int i, int j)
 {
     double complex c = i2c_re+j2c_im*I;
     double complex z = 0;
@@ -33,7 +33,7 @@ struct COMPLEX
     double im;
 };
 
-int tof_real(int i, int j)
+int tof_fast(int i, int j)
 {
     struct COMPLEX z = {0,0};
     struct COMPLEX c = {i2c_re, j2c_im};
@@ -73,7 +73,7 @@ int main()
     for(int j=0;j<YDIM;j++)
         for(int i=0;i<XDIM;i++)
         {
-            struct RGB tof_ret = translate2RGB(tof_real(i, j));
+            struct RGB tof_ret = translate2RGB(tof(i, j));
             fprintf(fp, "%c%c%c", tof_ret.R, tof_ret.G, tof_ret.B);
         }
     
