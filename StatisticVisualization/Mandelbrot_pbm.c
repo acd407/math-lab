@@ -45,7 +45,7 @@ bool tof_real(int i,int j)  //纯实数版本 (1536*1536->1000(1 core):4.991s)
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
-        if(z.re>2||z.im>2)
+        if(z.re>2||z.im>2)  //没必要用z.re*z.re+z.im*z.im>4，我们只关注是否收敛，不关心发散速度
             return false;
         n--;
     }

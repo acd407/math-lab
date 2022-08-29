@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <complex.h>
 
 //窗口大小
 #define XDIM 512
@@ -20,11 +21,24 @@ struct {
     double y_range;
 } args;
 
+int tof(int i, int j)
+{
+    double complex c = args.x_offset+(double)i/XDIM*args.x_range+ 
+        (args.y_offset+(1-(double)j/YDIM)*args.y_range)*I;
+    double complex z = 0;
+    for(int t=1;t<=NUM;t++){
+        z = z*z+c;
+        if(cabs(z)>2)
+            return t;
+    }
+    return 0;
+}
+
 struct COMPLEX {
     double re;
     double im;
 };
-int tof(int i, int j)
+int tof_fast(int i, int j)
 {
     struct COMPLEX z = {0,0};
     struct COMPLEX c = {
@@ -35,7 +49,7 @@ int tof(int i, int j)
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
-        if(z.re>2||z.im>2)
+        if(z.re*z.re+z.im*z.im>4)
             return t;
     }
     return 0;
@@ -62,7 +76,7 @@ void draw(SDL_Renderer *renderer)
 {
     for(int j=0; j<YDIM; j++)
         for(int i=0; i<XDIM; i++) {
-        struct RGB tof_ret = translate2RGB(tof(i, j));
+        struct RGB tof_ret = translate2RGB(tof_fast(i, j));
         SDL_SetRenderDrawColor(renderer, tof_ret.R, tof_ret.G, tof_ret.B, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer, i, j);
     }

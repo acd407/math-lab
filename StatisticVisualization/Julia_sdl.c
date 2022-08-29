@@ -39,7 +39,7 @@ int tof(int i, int j)
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
-        if(z.re>2||z.im>2)
+        if(z.re*z.re+z.im*z.im>4)
             return t;
     }
     return 0;
