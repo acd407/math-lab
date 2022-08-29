@@ -4,8 +4,8 @@
 #include <math.h>
 #include <complex.h>
 
-#define XDIM 1600
-#define YDIM 1000
+#define XDIM 2560
+#define YDIM 1600
 
 #define NUM 1024    //迭代次数
 
@@ -19,7 +19,7 @@ int tof(int i, int j)
 {
     double complex c = i2c_re+j2c_im*I;
     double complex z = 0;
-    for(int t=1;t<=NUM;t++){
+    for(int t=2;t<NUM;t++){
         z = z*z+c;
         if(cabs(z)>2)
             return t;
@@ -34,10 +34,10 @@ struct COMPLEX
 };
 
 int tof_fast(int i, int j)
-{
+{   //return 0, (1, NUM)
     struct COMPLEX z = {0,0};
     struct COMPLEX c = {i2c_re, j2c_im};
-    for(int t=1;t<=NUM;t++){
+    for(int t=2;t<NUM;t++){
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
@@ -58,7 +58,7 @@ struct RGB translate2RGB(int code)
 {
     struct RGB ret = {0, 0, 0}; //返回局部变量，危险
     if(code){
-        double log_code = log(code)/log(NUM);   //from 0 to 1
+        double log_code = log(code)/log(NUM);
         ret.R = (int)(sqrt(log_code)*256);
         ret.G = (int)(log_code*256);
         ret.B = (int)((1-log_code)*(1-log_code)*256);
@@ -73,7 +73,7 @@ int main()
     for(int j=0;j<YDIM;j++)
         for(int i=0;i<XDIM;i++)
         {
-            struct RGB tof_ret = translate2RGB(tof(i, j));
+            struct RGB tof_ret = translate2RGB(tof_fast(i, j));
             fprintf(fp, "%c%c%c", tof_ret.R, tof_ret.G, tof_ret.B);
         }
     

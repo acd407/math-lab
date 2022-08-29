@@ -11,9 +11,6 @@
 
 #define NUM 512   //迭代次数
 
-#define PI 3.141592653589793
-#define RMNEG(_X_) ((_X_)>=0?(_X_):0)
-
 struct {
     double x_offset;
     double y_offset;
@@ -26,7 +23,7 @@ int tof(int i, int j)
     double complex c = args.x_offset+(double)i/XDIM*args.x_range+ 
         (args.y_offset+(1-(double)j/YDIM)*args.y_range)*I;
     double complex z = 0;
-    for(int t=1;t<=NUM;t++){
+    for(int t=2;t<NUM;t++){
         z = z*z+c;
         if(cabs(z)>2)
             return t;
@@ -45,7 +42,7 @@ int tof_fast(int i, int j)
         args.x_offset+(double)i/XDIM*args.x_range, 
         args.y_offset+(1-(double)j/YDIM)*args.y_range
     };
-    for(int t=1; t<=NUM; t++) {
+    for(int t=2; t<NUM; t++) {
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
@@ -64,10 +61,10 @@ struct RGB translate2RGB(int code)
 {
     struct RGB ret = {0, 0, 0}; //返回局部变量，危险
     if(code){
-        double log_code = log(code)/log(NUM);   //from 0 to 1
-        ret.R = (int)(RMNEG(-cos(log_code*PI))*256);
-        ret.G = (int)(RMNEG(sin(log_code*PI))*256);
-        ret.B = (int)(RMNEG(cos(log_code*PI))*256);
+        double log_code = log(code)/log(NUM);
+        ret.R = (int)(sqrt(log_code)*256);
+        ret.G = (int)(log_code*256);
+        ret.B = (int)((1-log_code)*(1-log_code)*256);
     }
     return ret;
 }

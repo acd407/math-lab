@@ -9,8 +9,8 @@
 
 #define NUM 512    //迭代次数
 
-#define C_RE 0.26
-#define C_IM 0.0
+#define C_RE -0.8
+#define C_IM 0.156
 
 // z = z*z + c
 
@@ -22,7 +22,7 @@ int tof_complex(int i, int j)
 {
     double complex c = C_RE+C_IM*I;
     double complex z = i2z_re+j2z_im*I;
-    for(int t=1;t<=NUM;t++){
+    for(int t=2;t<NUM;t++){
         z = z*z+c;
         if(cabs(z)>2)
             return t;
@@ -39,7 +39,7 @@ int tof_real(int i, int j)
 {
     struct COMPLEX z = {i2z_re, j2z_im};
     struct COMPLEX c = {C_RE, C_IM};
-    for(int t=1;t<=NUM;t++){
+    for(int t=2;t<NUM;t++){
         double z_re_bak = z.re;
         z.re = z.re*z.re-z.im*z.im+c.re;
         z.im = 2*z_re_bak*z.im+c.im;
