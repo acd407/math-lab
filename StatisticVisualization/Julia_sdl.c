@@ -10,8 +10,8 @@
 
 #define NUM 512    //迭代次数
 
-#define PRINTOFFSET printf("offset = (%.6e, %.6e)\n", args.x_offset + args.x_range/2, args.y_offset + args.y_range/2)
-#define PRINTRANGE printf("range = %llf * %llf\n", args.x_range, args.y_range)
+#define PRINTOFFSET printf("offset = (%f, %f)\n", args.x_offset + args.x_range/2, args.y_offset + args.y_range/2)
+#define PRINTRANGE printf("range = %.6e * %.6e\n", args.x_range, args.y_range)
 
 struct COMPLEX {
     double re;
