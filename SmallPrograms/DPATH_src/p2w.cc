@@ -16,15 +16,15 @@ int dirlen(const char *str)
     return i;
 }
 
-// int dirlen(const char *str)
-// {
-//     int i=0;
-//     for(;str[i];i++) {
-//         if(str[i]=='/'||str[i]==':'||!str[i])
-//             break;
-//     }
-//     return i;
-// }
+ int dirlen(string *str, int p)
+ {
+     int i=p;
+     for(;(*str)[i];i++) {
+         if((*str)[i]=='/'||(*str)[i]==':'||!(*str)[i])
+             break;
+     }
+     return i-p;
+ }
 
 int main(int argc, char **argv)
 {
@@ -37,10 +37,10 @@ int main(int argc, char **argv)
         //puts(str.c_str());
         if(str[i]=='/') {
             if(str[i-1]==';'||i==0) {   //需要头转换
-                if(!str[i+1]||dirlen(str.c_str()+i+1)!=1) { // /usr/bin
+                if(!str[i+1]||dirlen(&str, i+1)!=1) { // /usr/bin
                     str.insert(i,"D:\\MSYS2");
                     i += 7;
-                } else if (str[i+1]&&dirlen(str.c_str()+i+1)==1) {  // /c/windows
+                } else if (str[i+1]&&dirlen(&str, i+1)==1) {  // /c/windows
                     str[i] = UPPER(str[i+1]);
                     str[i+1] = ':';
                     i += 1;
