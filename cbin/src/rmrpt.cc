@@ -1,14 +1,8 @@
 #include <cstring>
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <iostream>
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
-using std::strlen;
-using std::find;
+using namespace std;
 
 int main(int argc, char **argv)
 {
@@ -24,6 +18,7 @@ int main(int argc, char **argv)
             k = i+1;
         }
     strlist.push_back(argv[1]+k);
+    
     if(strlist.back().back()!=';')
         strlist.back().push_back(';');
 
@@ -34,11 +29,12 @@ int main(int argc, char **argv)
         }
     }
     
-    std::sort(strlist.begin(), strlist.end());
-    if(strlist.size()>1)
-        for(auto i=strlist.begin()+1;i!=strlist.end();i++)
-            if(*i==*(i-1))
-                strlist.erase(i--);
+    for(auto i=strlist.begin();i!=strlist.end();i++) {
+        for(auto j=i+1;j!=strlist.end();j++) {
+            if(*i==*j)
+                strlist.erase(j--);
+        }
+    }
 
     for(auto i=0;i<strlist.size();i++)
         cout<<strlist.at(i);
