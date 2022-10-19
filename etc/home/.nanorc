@@ -1,0 +1,12 @@
+include "/usr/share/nano/*.nanorc"
+
+set tabsize 4       # 设置制表符宽度
+set autoindent      # 允许自动缩进
+set noconvert       # 不要转换 DOS/UNIX 换行符
+set nowrap          # 不要自动换行
+set nohelp          # 不显示下面两行帮助
+set smarthome       # 第一次 Home 跳到行首非空字符，第二次到行首
+set tabstospaces    # 展开制表符为空格（如果需要的话）
+set mouse           # 允许鼠标
+set linenumbers     # 显示行号（可以在编辑时 ALT-# 切换）
+set nonewlines      # 不在文件末尾添加新行
