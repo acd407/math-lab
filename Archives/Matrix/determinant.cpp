@@ -117,12 +117,16 @@ public:
     }
 //========END========END========END========END========END========END========
 };
+
+#define LEN 100
+
 int main()
 {
-    double temp[16];
-    for(int i=0;i<16;i++)
-        cin>>temp[i];
-    det test(temp,16);
+    double temp[LEN];
+    srand(time(NULL));
+    for(int i=0;i<LEN;i++)
+        temp[i] = rand()%32;
+    det test(temp,LEN);
     //test.transpose();
     test.toUTM();
     test.print();
