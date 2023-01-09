@@ -1,4 +1,4 @@
-//g++ ma_mu_play.cc -o ma_mu_play -lfmt -lwinmm
+//g++ ma_mu_play.cc -o ma_mu_play -lfmt -lwinmm -s
 #include <fstream>
 #include <fmt/core.h>
 #include <Windows.h>
@@ -28,6 +28,13 @@ private:
         )   return true;
         return false;
     }
+    char getch() {
+        return string[offset++];
+    }
+    void putch() {
+        offset--;
+    }
+    bool play_note();
 public:
     music() { };
     music(const char *);
@@ -38,13 +45,6 @@ public:
     void print() {
         fmt::print(string);
     }
-    char getch() {
-        return string[offset++];
-    }
-    void putch() {
-        offset--;
-    }
-    bool play_note();
     void play() {
         while (play_note());
     }
@@ -65,14 +65,14 @@ music::music(const char *filename) {
 
 bool music::play_note() {
     char c = getch();
-    //fmt::print("{}: {}\n",offset, c);
-    //注释
+    //注释：一直读到行尾，下一字符为下一行第一个
     if(c=='@') {
         while (getch()!='\n');
         return true;
     }
     if(!is_identifier(c))
         return false;
+    //空字符：跳过
     if(c==' '||c=='\n'||c=='\t')
         return true;
     
