@@ -111,7 +111,7 @@ bool music::play_note() {
         note_sleep *= 1.5;
         c = getch();
     } else if(c=='-') {
-        note_sleep *= 1.5;
+        note_sleep *= 2;
         c = getch();
     } else
         while (c=='/') {
@@ -141,8 +141,30 @@ bool music::play_note() {
     return true;
 }
 
-int main () {
-    music mu("mu.txt");
-    mu.play();
+void piano() {
+	HMIDIOUT handle;
+	midiOutOpen(&handle, 0, 0, 0, CALLBACK_NULL);
+	std::map<char, int>v = {
+		{'Z',C3},{'X',D3},{'C',E3},{'V',F3},{'B',G3},{'N',A3},{'M',B3},
+		{'A',C4},{'S',D4},{'D',E4},{'F',F4},{'G',G4},{'H',A4},{'J',B4},
+		{'Q',C5},{'W',D5},{'E',E5},{'R',F5},{'T',G5},{'Y',A5},{'U',B5},
+	};
+	while (1) {
+		for (char i = 'A'; i <= 'Z'; i++) {
+			if (GetKeyState(i) < 0) {
+				midiOutShortMsg(handle, (0x007f << 16) + (v[i] << 8) + 0x90);
+				while (GetKeyState(i) < 0)Sleep(100);
+			}
+		}
+	}
+}
+
+
+int main (int argc, char** argv) {
+    if(argc==2) {
+        music mu(argv[1]);
+        mu.play();
+    } else
+        piano();
     return 0;
 }
