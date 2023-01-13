@@ -1,0 +1,6 @@
+for file in `ls`
+do
+    if [[ ${file##*.} == 'c' ]] ; then
+        tcc ${file%.*}'.c' -o ../${file%.*}
+    fi
+done

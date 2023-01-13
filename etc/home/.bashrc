@@ -5,13 +5,15 @@
 # with this software. 
 # If not, see <https://creativecommons.org/publicdomain/zero/1.0/>. 
 
-# ================ Functions =============================
-function _22 () {
-    echo ${22}
-}
 # call .mrc
-source ~/.mrc
-echo "start shell in "$(( $(gettick) - $(_22 $(cat /proc/$$/stat)) ))" ms" 
+source ~/.mrc/.mrc
+echo "start shell in "$(( $(gettick) - $(cat /proc/$$/stat | awk '{printf $22}') ))" ms" 
+
+PS1='\n\e[1;34m\u\e[0m@\e[1;32m\h \e[1;35mMSYS2\e[0m \e[33m\w\e[0;1m\n\$\e[0m '
+
+
+# eval "$(starship init bash)"
+
 # ~/.bashrc: executed by bash(1) for interactive shells.
 
 # The copy in your home directory (~/.bashrc) is yours, please
