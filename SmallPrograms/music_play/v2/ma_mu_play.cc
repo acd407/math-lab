@@ -9,6 +9,7 @@ class music {
 private:
     char *string = nullptr;
     int offset = 0;
+    int line = 0;
     long size = 0;
     struct {
         int volume = 0x7f;
@@ -22,7 +23,7 @@ private:
     }
     bool is_identifier(char c) {
         if( c == 'L' || c == 'H' || c == 'M' || \
-            c == '+' || c == '-' || \
+            c == '+' || c == '-' || c == '#' || \
             c == ' ' || c == '\n'|| c == '\t'|| \
             is_note(c)
         )   return true;
@@ -68,13 +69,18 @@ bool music::play_note() {
     //注释：一直读到行尾，下一字符为下一行第一个
     if(c=='@') {
         while (getch()!='\n');
+        line++;
         return true;
     }
     if(!is_identifier(c))
         return false;
     //空字符：跳过
-    if(c==' '||c=='\n'||c=='\t')
+    if(c==' '||c=='\t')
         return true;
+    if(c=='\n') {
+        line++;
+        return true;
+    }
     
     //控制字符
     if (c == 'L' || c == 'H' || c == 'M') {
@@ -82,17 +88,22 @@ bool music::play_note() {
             note.sleep = LOW_SPEED;
         else if (c == 'H')
             note.sleep = HIGH_SPEED;
-        else if (c == 'M')
+        else
             note.sleep = MIDDLE_SPEED;
-        c = getch();
+        while (c != ',')
+            c = getch();
         return true;
     }
     
-    int note_segment = 1;   //8度
+    //----流程开始----
+    //'  +#5/// ,'
+    int note_segment = 1;   //初始8度
     int note_offset = 0;    //偏移
     int note_sleep = note.sleep;//Custom持续时间
+    bool up_half_note = false;  //升半音
     
-    if(c == '+' || c == '-') {  //8度
+    //确定8度
+    if(c == '+' || c == '-') {
         if (c == '+')
             note_segment = 2;
         else if (c == '-')
@@ -100,27 +111,42 @@ bool music::play_note() {
         c = getch();
     }
     
+    //确定升半音
+    if(c == '#') {
+        up_half_note = true;
+        c = getch();
+    }
+    
     if(!is_note(c)) {
-        fmt::print("{}: {}: error! {}: {}", __FILE__, __LINE__, offset, c);
+        fmt::print("{}: {}: error! {}: {}: {}", __FILE__, __LINE__, offset, line, c);
         exit(0);
     }
     note_offset = c-48-1;   //偏移
     c = getch();
     
+    //音符长度控制
     if(c=='.') {
         note_sleep *= 1.5;
-        c = getch();
-    } else if(c=='-') {
-        note_sleep *= 2;
         c = getch();
     } else
         while (c=='/') {
             note_sleep /= 2;
             c = getch();
         }
+        
+    if(c=='-') {
+        int n = 0;
+        while (c=='-') {
+            n++;
+            c = getch();
+        }
+        note_sleep += n * note.sleep;
+    }
     
+    while (c == ' '||c == '\t')
+        c = getch();
     if (c!=',') {
-        fmt::print("{}: {}: error! {}: {}", __FILE__, __LINE__, offset, c);
+        fmt::print("{}: {}: error! {}: {}: {}", __FILE__, __LINE__, offset, line, c);
         exit(0);
     }
     
@@ -130,11 +156,15 @@ bool music::play_note() {
         {C5, D5, E5, F5, G5, A5, B5},
     };
     
+    //等于0，则跳过
     if(note_offset>=0) {
-        int note_voice = (note.volume << 16) + \
-            (note_table[note_segment][note_offset] << 8) + 0x94;
+        int note_value = note_table[note_segment][note_offset];
+        if (up_half_note)
+            ++note_value;
+        int note_voice = (note.volume << 16) + (note_value << 8) + 0x94;
+        //输出音调
         char tr[3] = {'L', 'M', 'H'};
-        fmt::print("{:c}{:c}\n", tr[note_segment], '1'+note_offset);
+        fmt::print("{:c}{:c}{:c}  {}\n", tr[note_segment], '1'+note_offset, up_half_note?'s':' ', note_sleep);
         midiOutShortMsg(handle, note_voice);
     }
     Sleep(note_sleep);
