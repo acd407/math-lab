@@ -19,9 +19,9 @@ enum scale {
 };
 
 enum voice {
-    L1 = C3, L2 = D3, L3 = E3, L4 = F3, L5 = G3, L6 = A3, L7 = B3,
-    M1 = C4, M2 = D4, M3 = E4, M4 = F4, M5 = G4, M6 = A4, M7 = B4,
-    H1 = C5, H2 = D5, H3 = E5, H4 = F5, H5 = G5, H6 = A5, H7 = B5,
+    L1 = C3, L1s = C3s, L2 = D3, L2s = D3s, L3 = E3, L4 = F3, L4s = F3s, L5 = G3, L5s = G3s, L6 = A3, L6s = A3s, L7 = B3,
+    M1 = C4, M1s = C4s, M2 = D4, M2s = D4s, M3 = E4, M4 = F4, M4s = F4s, M5 = G4, M5s = G4s, M6 = A4, M6s = A4s, M7 = B4,
+    H1 = C5, H1s = C5s, H2 = D5, H2s = D5s, H3 = E5, H4 = F5, H4s = F5s, H5 = G5, H5s = G5s, H6 = A5, H6s = A5s, H7 = B5,
 	SPEED_INTERVAL = 200, HIGH_SPEED = 300, 
 	MIDDLE_SPEED = HIGH_SPEED + SPEED_INTERVAL, 
     LOW_SPEED = MIDDLE_SPEED + SPEED_INTERVAL, 
