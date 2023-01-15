@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Windows.h>
+#include <conio.h>
 #include <map>
 //#pragma comment(lib,"winmm.lib")
 
@@ -32,49 +33,7 @@ enum Voice
 	_2 = 2, _4 = 4, _8 = 8, 
 	__ = 0xff
 };
-void Music() {
-	HMIDIOUT handle;
-	midiOutOpen(&handle, 0, 0, 0, CALLBACK_NULL);
-	int volume = 0x7f;
-	int voice = 0x0;
-	int sleep = 300;
-	int _s = 0;
-	int music[] = {
-	#include "2"
-    };
-	for (auto i : music) {
-		if (i == LOW_SPEED || i == HIGH_SPEED || i == MIDDLE_SPEED) {
-			sleep = i;
-			continue;
-		} else if (i == HALF_SPEED) {
-			sleep /= 2;
-			continue;
-		} else if (i == DOUBLE_SPEED) {
-			sleep *= 2;
-			continue;
-		} else if (i == __) {
-			if (_s) {
-				Sleep(sleep / _s);
-				_s = 0;
-			} else
-				Sleep(sleep);
-			continue;
-		} else if (i == _2 || i == _4 || i == _8) {
-			_s = i;
-			continue;
-		}
-		voice = (volume << 16) + (i << 8) + 0x94;
-		midiOutShortMsg(handle, voice);
-		if (_s) {
-			Sleep(sleep / _s);
-			_s = 0;
-		} else
-			Sleep(sleep);
-	}
-	midiOutClose(handle);
-}
 
-#ifdef PIANO
 void Piano() {
 	HMIDIOUT handle;
 	midiOutOpen(&handle, 0, 0, 0, CALLBACK_NULL);
@@ -84,31 +43,21 @@ void Piano() {
 		{'Q',C5},{'W',D5},{'E',E5},{'R',F5},{'T',G5},{'Y',A5},{'U',B5},
 	};
 	std::printf("¸ÖÇÙÒÑ¿ªÆô£¬ÇÃ»÷¼üÅÌQ-U,A-J,Z-M\n");
+	char i;
 	while (1) {
-		for (char i = 'A'; i <= 'Z'; i++) {
-			if (GetKeyState(i) < 0) {
-				if (i == 'L') {
-					midiOutClose(handle);
-					return;
-				}
-				midiOutShortMsg(handle, (0x007f << 16) + (v[i] << 8) + 0x90);
-				std::printf("Çë°´L¼üÍË³ö\n");
-				std::printf("ÒÑ°´ÏÂ%c¼ü\n", i);
-				while (GetKeyState(i) < 0)Sleep(100);
+		if (GetKeyState(i) < 0) {
+			if (i == 'L') {
+				midiOutClose(handle);
+				return;
 			}
+			midiOutShortMsg(handle, (0x007f << 16) + (v[i] << 8) + 0x90);
+			//while (GetKeyState(i) < 0)Sleep(100);
 		}
+		i = getch();
 	}
 }
-#endif
 
-int main()
-{
-	
-	Music();
-	
-	#ifdef PIANO
+int main() {
 	Piano();
-	#endif
-	
 	return 0;
 }
