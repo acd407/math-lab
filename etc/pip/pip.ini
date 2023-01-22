@@ -1,4 +1,0 @@
-[global]
-timeout = 6000
-index-url = http://mirrors.aliyun.com/pypi/simple
-trusted-host = mirrors.aliyun.com
