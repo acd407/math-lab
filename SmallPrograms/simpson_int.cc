@@ -2,7 +2,7 @@
 #include <cmath>
 
 double func(double x) {
-    return x*x*x-2.4*x*x+15*x-19;
+    return x*sin(x);
 }
 
 double simpson(double a, double b, double (*f)(double)) {
@@ -28,7 +28,7 @@ double integrate(double a, double b, double (*f)(double)) {
 }
 
 template <long long N>
-double ints(double a, double b, double (*f)(double), size_t depth) {
+double ints(double a, double b, double (*f)(double), size_t depth = 0) {
     static size_t ints_called_count = 0;
     ints_called_count ++;
     double rs = simpson(a, b, f);
@@ -60,7 +60,7 @@ double gslIntegration(double a, double b, double (*g)(double)) {
 
 int main() {
     fmt::print("{}\n", integrate<524287>(0.3, 1.5, func));
-    fmt::print("{}\n", ints<200>(0.3, 1.5, func, 0));
+    fmt::print("{}\n", ints<200>(0.3, 1.5, func));
     fmt::print("{}\n", gslIntegration(0.3, 1.5, func));
     return 0;
 }
