@@ -1,8 +1,10 @@
-#ifndef MUSIC_H
-#define MUSIC_H
+#pragma once
 
 #include <Windows.h>
 #include <fmt/core.h>
+#include <interupt.h>
+
+using namespace intreupt;
 
 struct Note {
     byte timbre;   //音色
@@ -10,7 +12,7 @@ struct Note {
     byte scale;    //音阶
     byte cmd;      //命令
     byte channel;  //通道
-    int sleep;     //长度
+    int  sleep;    //长度
 };
 
 struct Notes {
@@ -25,33 +27,17 @@ private:
         int offset = 0;
         int line = 0;
     } file;        
-    struct {
-        byte volume = 0x7f;
-        byte timbre = 0;   //默认音色为钢琴
-        byte channel = 4;
-        int sleep = 500;
-    } dft;
     HMIDIOUT handle;
-    
+    Note default_Note;
     bool is_identifier(char c);
     bool play_note(Notes);
     Notes get_note();
     char getch();
-    void putch() {
-        file.offset--;
-    }
+    void putch();
 public:
-    music() { };
     music(const char *);
-    ~ music() {
-        delete []file.raw;
-        midiOutClose(handle);
-    };
-    void print() {
-        for(int i=0;file.raw[i]!='$';i++)
-            putchar(file.raw[i]);
-    }
+    ~music();
+    void print();
     void play();
 };
 
-#endif

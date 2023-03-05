@@ -1,5 +1,4 @@
-//g++ music.cpp main.cpp -o music -lfmt -lwinmm -s
-#include "music.h"
+#include <music.h>
 
 int main (int argc, char** argv) {
     if(argc==2) {
