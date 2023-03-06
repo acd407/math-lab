@@ -4,8 +4,6 @@
 #include <fmt/core.h>
 #include <interupt.h>
 
-using namespace intreupt;
-
 struct Note {
     byte timbre;   //音色
     byte volume;   //音量
