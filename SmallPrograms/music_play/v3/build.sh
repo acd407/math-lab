@@ -1,27 +1,32 @@
-CC=g++
+#! env bash
 
-EXE=mu
+source ./def.sh
 
-INCS=./include
-SRC="$(echo ./src/*.cpp)"
-
-LIBS="winmm fmt"
-
-for inc in $INCS
-do
-    INC="$INC -I$inc"
+for inc in $INC; do
+    INC_char="$INC_char -I$inc"
 done
 
-for file in $SRC
-do
+for lib in $LIB; do
+    LIB_char="$LIB_char -L$lib"
+done
+
+for file in $SRC/*.cpp; do
     obj=${file%.*}
-    $CC -o ${obj}.o $INC -c $file
+    if [ -f "${obj}.o" ]; then
+        if (( "$(stat -c %Y $file)" < "$(stat -c %Y ${obj}.o)" )); then
+            echo -e $file is up to date, skipping
+            continue
+        fi
+    fi
+    echo $CC -o ${obj}.o $INC_char -c $file
+    $CC -o ${obj}.o $INC_char -c $file
 done
 
-for lib in $LIBS
-do
-    LINK="$LINK -l$lib"
+# sh 就是一坨翔
+for _lib in $libs; do
+    libs_char="$libs_char -l$_lib"
 done
 
-OBJ="$(echo ./src/*.o)"
-$CC -o $EXE $OBJ $LINK -s
+OBJ="$(echo $SRC/*.o)"
+echo $CC -o $EXE $OBJ $LIB_char $libs_char -s
+$CC -o $EXE $OBJ $LIB_char $libs_char -s
