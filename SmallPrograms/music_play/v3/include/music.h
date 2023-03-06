@@ -24,12 +24,14 @@ private:
         char *raw = nullptr;
         int offset = 0;
         int line = 0;
-    } file;        
+    } file;
+    int default_segment, default_offset;
     HMIDIOUT handle;
     Note default_Note;
     bool is_identifier(char c);
     bool play_note(Notes);
     Notes get_note();
+    char getunblank();
     char getch();
     void putch();
 public:
