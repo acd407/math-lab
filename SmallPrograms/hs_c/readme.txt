@@ -1,0 +1,1 @@
+compile haskell source file with c
